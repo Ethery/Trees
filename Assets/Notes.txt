@@ -1,0 +1,16 @@
+﻿Arbre->liquidambar
+Faire pousser des arbres
+Pluie -> contrôler la pluie
+Liquide en barre pour arroser
+
+Arbres qui tombent et plantage de nouveaux arbres
+Ou Arbres qui tombent et pas de nouveaux arbres
+Trop d'arrosage = tout noir
+
+Pas assez d'arrosage -> perd ses feuilles
+Différentes saisons 
+
+Si pile assez d'arrosage -> l'arbre grandit, ou fait des fruits
+
+Éléments variants-> différents arbres, catastrophe aléatoire : inondation, feu, ...
+Animaux
