@@ -1,9 +1,15 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(TreeRefs))]
 public class TreeLife : MonoBehaviour
 {
 	private float LifeTime;
+
+	public float LifeTimeNormalized => ((LifeTime / GameManager.Instance.GameRules.MaxLife[TreeSize]));
+
 	private float WateringLevel = 0;
+	public float WateringLevelNormalized => ((WateringLevel / GameManager.Instance.GameRules.MaxWateringLevel[TreeSize]));
+
 	private float TimeBeforeFalling;
 
 	private Vector3Int TreePosition;
@@ -19,15 +25,14 @@ public class TreeLife : MonoBehaviour
 		TreeSize = size;
 		TreePosition = position;
 
-		LifeTime = GameManager.Instance.GameRules.m_MaxLife / (float)TreeSize;
+		LifeTime = GameManager.Instance.GameRules.MaxLife[TreeSize];
 		WateringLevel = 0;
 		TimeBeforeFalling = GameManager.Instance.GameRules.TimeBeforeFalling;
 
 		m_Animator = GetComponent<Animator>();
 
 		//Init Animations.
-		float percentage = ((LifeTime / GameManager.Instance.GameRules.m_MaxLife));
-		m_Animator.SetFloat("LifeTime", percentage);
+		m_Animator.SetFloat("LifeTime", LifeTimeNormalized);
 	}
 
 	public void Update()
@@ -41,7 +46,14 @@ public class TreeLife : MonoBehaviour
 			else
 			{
 				WateringLevel -= Time.deltaTime;
-				LifeTime += Time.deltaTime;
+				if (LifeTime < GameManager.Instance.GameRules.MaxLife[TreeSize])
+				{
+					LifeTime += Time.deltaTime;
+				}
+				else
+				{
+					LifeTime = GameManager.Instance.GameRules.MaxLife[TreeSize];
+				}
 			}
 		}
 		else
@@ -60,10 +72,11 @@ public class TreeLife : MonoBehaviour
 
 		if (LifeTime > 0)
 		{
-			float percentage = ((LifeTime / GameManager.Instance.GameRules.m_MaxLife));
-			m_Animator.SetFloat("LifeTime", percentage);
+			m_Animator.SetFloat("LifeTime", LifeTimeNormalized);
 			m_Animator.SetFloat("Season", GameManager.Instance.Season);
 		}
+		GetComponent<TreeRefs>().LifeTimeSlider.value = LifeTimeNormalized;
+		GetComponent<TreeRefs>().WateringLevelSlider.value = WateringLevelNormalized;
 	}
 
 	public void WaterTree(float waterAmount)

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59bbc54c0c4a2d7458fa0fffc0811038, type: 3}
   m_Name: Rules
   m_EditorClassIdentifier: 
-  m_MaxLife: 10
+  MaxLifeForBigTree: 10
   TimeBeforeFalling: 3

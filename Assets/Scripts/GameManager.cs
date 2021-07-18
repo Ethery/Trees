@@ -3,10 +3,11 @@ using UnityEngine.Tilemaps;
 
 public enum ETreeSize
 {
-	None = 0,
+	None = 0, //Should ne always first
 	Large,
 	Medium,
 	Small,
+	Count //should be always last.
 }
 
 public enum ESeason
