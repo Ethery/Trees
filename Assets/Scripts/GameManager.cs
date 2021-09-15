@@ -3,7 +3,7 @@ using UnityEngine.Tilemaps;
 
 public enum ETreeSize
 {
-	None = 0, //Should ne always first
+	None = -1, //Should be always first
 	Large,
 	Medium,
 	Small,
@@ -36,7 +36,9 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	[Header("Tilemaps")]
 	public Tilemap Map;
+	public Tilemap Interactions;
 
 	[SerializeField]
 	private GameRules m_GameRules;

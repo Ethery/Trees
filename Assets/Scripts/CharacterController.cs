@@ -4,48 +4,50 @@ using UnityEngine.Tilemaps;
 
 public class CharacterController : MonoBehaviour
 {
-	public Tilemap Interactions;
+	public Tilemap Interactions => GameManager.m_Instance.Interactions;
+	public Tilemap Map => GameManager.m_Instance.Map;
 
 	[Header("Aim")]
 	public TileBase AimTile;
 	public Vector3Int AimPos;
-	public Vector3Int SelectionPos;
 
 	public Vector2 LastInputCamera;
 	public Plane m_Plane = new Plane(Vector3.up, -1);
+
+	[Header("Debug")]
+	public Transform DebugObject;
 
 	public void OnCursor()
 	{
 		Interactions.SetTile(AimPos, null);
 
-		AimPos = GameManager.Instance.Map.LocalToCell(GetMousePosOnPlane());
+		Vector3 pos = DebugObject.position = GetMousePosOnPlane();
+		AimPos = GameManager.Instance.Map.LocalToCell(pos);
 
 		Interactions.SetTile(AimPos, AimTile);
 	}
 
 	public void OnMouse()
 	{
+		Interactions.SetTile(AimPos, null);
 		if (Mouse.current.leftButton.isPressed)
 		{
-			SelectionPos = GameManager.Instance.Map.LocalToCell(GetMousePosOnPlane());
-
-			Interactions.SetTile(SelectionPos, null);
-			CustomTile SelectedTile = GameManager.Instance.Map.GetTile<CustomTile>(SelectionPos);
+			Interactions.SetTile(AimPos, AimTile);
+			TreeTile SelectedTile = Map.GetTile<TreeTile>(AimPos);
 			if (SelectedTile != null && SelectedTile.isTargetable)
 			{
-				Interactions.SetTile(SelectionPos, AimTile);
-				SelectedTile.Selected = true;
-				if (SelectedTile is TreeTile)
-				{
-					(SelectedTile as TreeTile).TreeLife.WaterTree(3f);
-				}
+				SelectedTile.TreeLife.WaterTree(GameManager.Instance.GameRules.WateringPerAction);
+			}
+			else
+			{
+				Map.SetTile(AimPos, GameManager.Instance.GameRules.m_Prefabs[(int)ETreeSize.Medium]);
 			}
 		}
 	}
 
 	public Vector3 GetMousePosOnPlane()
 	{
-		Vector2 mousePos = Mouse.current.position.ReadValue();
+		Vector2 mousePos = Mouse.current.position.ReadUnprocessedValue();
 		Ray mouseRay = GetComponent<PlayerInput>().camera.ScreenPointToRay(mousePos);
 		float enter;
 		if (m_Plane.Raycast(mouseRay, out enter))

@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Rules
   m_EditorClassIdentifier: 
   MaxLifeForBigTree: 10
+  MaxWateringLevelForBigTree: 900
   TimeBeforeFalling: 3
